@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useContext } from 'react';
-
-import { AppContext } from '../App';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import Key from './Key';
+import { useAppContext } from './AppProvider';
 
 const Keyboard = () => {
-  const { onEnter, onDeleteLetter, onSelectLetter } = useContext(AppContext);
+  const { onSelectLetter, onDeleteLetter, onEnter } = useAppContext();
+
   const keys1 = useMemo(() => {
     return ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
   }, []);
@@ -40,8 +40,7 @@ const Keyboard = () => {
         });
       }
       // eslint-disable-next-line prettier/prettier
-    },[onEnter, onDeleteLetter, onSelectLetter, keys1, keys2, keys3],
-  );
+    },[onEnter, onDeleteLetter, onSelectLetter, keys1, keys2, keys3]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyboard);

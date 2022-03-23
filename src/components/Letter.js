@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-import { AppContext } from '../App';
+import { useAppContext } from './AppProvider';
 
 const Letter = ({ letterPos, attemptVal }) => {
-  const { board } = useContext(AppContext);
+  const { board } = useAppContext();
   const letter = board[attemptVal][letterPos];
 
   return <div className='letter'>{letter}</div>;
