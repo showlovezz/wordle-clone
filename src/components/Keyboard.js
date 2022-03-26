@@ -4,7 +4,7 @@ import Key from './Key';
 import { useAppContext } from './AppProvider';
 
 const Keyboard = () => {
-  const { onSelectLetter, onDeleteLetter, onEnter } = useAppContext();
+  const { onSelectLetter, onDeleteLetter, onEnter, disabledLetters } = useAppContext();
 
   const keys1 = useMemo(() => {
     return ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
@@ -54,18 +54,18 @@ const Keyboard = () => {
     <div className='keyboard' onKeyDown={handleKeyboard}>
       <div className='line1'>
         {keys1.map((key, index) => {
-          return <Key keyVal={key} key={index} />;
+          return <Key keyVal={key} key={index} disabled={disabledLetters.includes(key)} />;
         })}
       </div>
       <div className='line2'>
         {keys2.map((key, index) => {
-          return <Key keyVal={key} key={index} />;
+          return <Key keyVal={key} key={index} disabled={disabledLetters.includes(key)} />;
         })}
       </div>
       <div className='line3'>
         <Key keyVal='ENTER' bigKey />
         {keys3.map((key, index) => {
-          return <Key keyVal={key} key={index} />;
+          return <Key keyVal={key} key={index} disabled={disabledLetters.includes(key)} />;
         })}
         <Key keyVal='DELETE' bigKey />
       </div>

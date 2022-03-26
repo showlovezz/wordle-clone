@@ -1,7 +1,7 @@
-import React, { useState, createContext, useContext, useCallback } from 'react';
+import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import { boardDefault } from '../Words';
+import { boardDefault, generateWordSet } from '../Words';
 
 const AppContext = createContext();
 
@@ -10,6 +10,17 @@ export const useAppContext = () => useContext(AppContext);
 const AppProvider = ({ children }) => {
   const [board, setBoard] = useState(boardDefault);
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letterPos: 0 });
+  const [wordSet, setWordSet] = useState(new Set());
+  const [disabledLetters, setDisabledLetters] = useState([]);
+  const [gameOver, setGameOver] = useState({ gameOver: false, guessedWord: false });
+
+  const currentWord = 'RIGHT';
+
+  useEffect(() => {
+    generateWordSet().then((words) => {
+      setWordSet(words.wordSet);
+    });
+  }, []);
 
   const onSelectLetter = useCallback(
     (keyVal) => {
@@ -34,8 +45,26 @@ const AppProvider = ({ children }) => {
   const onEnter = useCallback(() => {
     if (currAttempt.letterPos !== 5) return;
 
-    setCurrAttempt({ attempt: currAttempt.attempt + 1, letterPos: 0 });
-  }, [currAttempt.attempt, currAttempt.letterPos]);
+    let currWord = '';
+    for (let i = 0; i < 5; i++) {
+      currWord += board[currAttempt.attempt][i];
+    }
+
+    if (wordSet.has(currWord.toLowerCase())) {
+      setCurrAttempt({ attempt: currAttempt.attempt + 1, letterPos: 0 });
+    } else {
+      alert('Word Not Found');
+    }
+
+    if (currWord === currentWord) {
+      setGameOver({ gameOver: true, guessedWord: true });
+      return;
+    }
+
+    if (currAttempt.attempt === 5) {
+      setGameOver({ gameOver: true, guessedWord: false });
+    }
+  }, [currAttempt.attempt, currAttempt.letterPos, board, wordSet]);
 
   return (
     <AppContext.Provider
@@ -47,6 +76,11 @@ const AppProvider = ({ children }) => {
         onSelectLetter,
         onDeleteLetter,
         onEnter,
+        currentWord,
+        disabledLetters,
+        setDisabledLetters,
+        gameOver,
+        setGameOver,
       }}
     >
       {children}

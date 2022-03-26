@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { useAppContext } from './AppProvider';
 
-const Key = ({ keyVal, bigKey }) => {
+const Key = ({ keyVal, bigKey, disabled }) => {
   const { onSelectLetter, onDeleteLetter, onEnter } = useAppContext();
 
   // 這裡要思考，是否還需要用 useCallback 包
@@ -18,7 +18,7 @@ const Key = ({ keyVal, bigKey }) => {
   };
 
   return (
-    <div className='key' id={bigKey && 'big'} onClick={selectLetter}>
+    <div className='key' id={bigKey ? 'big' : disabled && 'disabled'} onClick={selectLetter}>
       {keyVal}
     </div>
   );
@@ -27,6 +27,7 @@ const Key = ({ keyVal, bigKey }) => {
 Key.propTypes = {
   keyVal: PropTypes.string.isRequired,
   bigKey: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 export default Key;

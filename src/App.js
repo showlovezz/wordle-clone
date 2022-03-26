@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Board from './components/Board';
-import Keyboard from './components/Keyboard';
+import KeyboardEvent from './components/KeyBoardEvent';
 import AppProvider from './components/AppProvider';
 import './App.css';
 
@@ -14,7 +14,7 @@ const App = () => {
       <AppProvider>
         <div className='game'>
           <Board />
-          <Keyboard />
+          <KeyboardEvent />
         </div>
       </AppProvider>
     </div>
