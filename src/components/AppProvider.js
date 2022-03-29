@@ -13,12 +13,12 @@ const AppProvider = ({ children }) => {
   const [wordSet, setWordSet] = useState(new Set());
   const [disabledLetters, setDisabledLetters] = useState([]);
   const [gameOver, setGameOver] = useState({ gameOver: false, guessedWord: false });
-
-  const currentWord = 'RIGHT';
+  const [currentWord, setCurrentWord] = useState('');
 
   useEffect(() => {
     generateWordSet().then((words) => {
       setWordSet(words.wordSet);
+      setCurrentWord(words.todayWord);
     });
   }, []);
 
@@ -45,15 +45,13 @@ const AppProvider = ({ children }) => {
   const onEnter = useCallback(() => {
     if (currAttempt.letterPos !== 5) return;
 
-    let currWord = '';
-    for (let i = 0; i < 5; i++) {
-      currWord += board[currAttempt.attempt][i];
-    }
+    const currWord = board[currAttempt.attempt].join('');
 
     if (wordSet.has(currWord.toLowerCase())) {
       setCurrAttempt({ attempt: currAttempt.attempt + 1, letterPos: 0 });
     } else {
       alert('Word Not Found');
+      return;
     }
 
     if (currWord === currentWord) {
@@ -64,7 +62,7 @@ const AppProvider = ({ children }) => {
     if (currAttempt.attempt === 5) {
       setGameOver({ gameOver: true, guessedWord: false });
     }
-  }, [currAttempt.attempt, currAttempt.letterPos, board, wordSet]);
+  }, [currAttempt.attempt, currAttempt.letterPos, board, wordSet, currentWord]);
 
   return (
     <AppContext.Provider

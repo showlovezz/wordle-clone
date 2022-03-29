@@ -1,20 +1,15 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import Key from './Key';
 import { useAppContext } from './AppProvider';
 
+const keys1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
+const keys2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
+const keys3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
+const allKey = new Set([...keys1, ...keys2, ...keys3]);
+
 const Keyboard = () => {
   const { onSelectLetter, onDeleteLetter, onEnter, disabledLetters } = useAppContext();
-
-  const keys1 = useMemo(() => {
-    return ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
-  }, []);
-  const keys2 = useMemo(() => {
-    return ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
-  }, []);
-  const keys3 = useMemo(() => {
-    return ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
-  }, []);
 
   const handleKeyboard = useCallback(
     (event) => {
@@ -23,24 +18,13 @@ const Keyboard = () => {
       } else if (event.key === 'Backspace') {
         onDeleteLetter();
       } else {
-        keys1.forEach((key) => {
-          if (event.key.toUpperCase() === key.toUpperCase()) {
-            onSelectLetter(key);
-          }
-        });
-        keys2.forEach((key) => {
-          if (event.key.toUpperCase() === key.toUpperCase()) {
-            onSelectLetter(key);
-          }
-        });
-        keys3.forEach((key) => {
-          if (event.key.toUpperCase() === key.toUpperCase()) {
-            onSelectLetter(key);
-          }
-        });
+        if (allKey.has(event.key.toUpperCase())) {
+          onSelectLetter(event.key.toUpperCase());
+        }
       }
       // eslint-disable-next-line prettier/prettier
-    },[onEnter, onDeleteLetter, onSelectLetter, keys1, keys2, keys3]);
+    },[onEnter, onDeleteLetter, onSelectLetter]);
+
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyboard);
