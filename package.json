@@ -21,12 +21,6 @@
     "formatCheck": "prettier . --check --ignore-unknown",
     "lintCheck": "eslint --ext=js,jsx src/"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
